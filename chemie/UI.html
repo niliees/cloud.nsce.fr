@@ -86,8 +86,8 @@
     <script>
         async function downloadFile(filename) {
             try {
-                // Direkter Pfad zur Datei ohne cloud.nsce.fr/
-                const filePath = `chemie/${filename}`;
+                // Vollständiger Pfad zur Datei auf cloud.nsce.fr
+                const filePath = `/cloud.nsce.fr/chemie/${filename}`;
                 
                 // Datei als ArrayBuffer lesen
                 const response = await window.fs.readFile(filePath);
@@ -112,7 +112,7 @@
                 }, 100);
             } catch (error) {
                 console.error('Fehler beim Herunterladen:', error);
-                alert('Fehler beim Herunterladen der Datei. Bitte überprüfen Sie den Dateipfad.');
+                alert(`Fehler beim Zugriff auf die Datei: ${filename}\nBitte überprüfen Sie, ob die Datei existiert und Sie die notwendigen Berechtigungen haben.`);
             }
         }
     </script>
