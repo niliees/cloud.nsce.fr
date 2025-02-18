@@ -241,10 +241,7 @@
                 "Optik_Protokoll.pdf"
             ],
             chemie: [
-                "Periodensystem_Notizen.pdf",
-                "Reaktionen_Protokoll.docx",
-                "Säuren_Basen_Test.pdf",
-                "Organische_Chemie.pdf"
+                "bsp-datei.pdf"
             ],
             geschichte: [
                 "Mittelalter_Timeline.pdf",
@@ -340,8 +337,42 @@
             }
         }
 
-        function downloadFile(filename) {
-            alert(`Download von "${filename}" würde jetzt starten...`);
+        async function downloadFile(filename) {
+            try {
+                // Den vollständigen Pfad zur Datei erstellen
+                const filePath = `chemie/${filename}`;
+                
+                // Datei vom Dateisystem lesen
+                const response = await window.fs.readFile(filePath);
+                
+                // Blob erstellen mit dem korrekten MIME-Typ
+                let mimeType = 'application/octet-stream';
+                if (filename.endsWith('.pdf')) {
+                    mimeType = 'application/pdf';
+                } else if (filename.endsWith('.docx')) {
+                    mimeType = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+                }
+                
+                const blob = new Blob([response], { type: mimeType });
+                
+                // Download-Link erstellen
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.style.display = 'none';
+                a.href = url;
+                a.download = filename;
+                
+                // Link zum DOM hinzufügen und klicken
+                document.body.appendChild(a);
+                a.click();
+                
+                // Aufräumen
+                window.URL.revokeObjectURL(url);
+                document.body.removeChild(a);
+            } catch (error) {
+                console.error('Fehler beim Herunterladen:', error);
+                alert('Fehler beim Herunterladen der Datei: ' + error.message);
+            }
         }
     </script>
 </body>
